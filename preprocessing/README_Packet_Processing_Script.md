@@ -55,7 +55,7 @@ directories = [
     '/path/to/second/directory',
     '/path/to/third/directory'
 ]
-
+```
 ### Outputs
 - `packets_pcap.h5`: Processed packet data
 - `labels_pcap.h5`: Corresponding labels
