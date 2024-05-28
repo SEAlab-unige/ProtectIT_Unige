@@ -70,6 +70,7 @@ Implements the NAS algorithms, including mutations and generation management.
   - `save_partial(self, parent, best_network, i_gen, gen_best_score, absolute_best_score)`: Saves the parent and best network models at a given generation.
   - `log_message(self, message, mode='a')`: Logs messages to a specified NAS log file.
 
+
 ### `library_block.py`
 Defines the building blocks used to construct the network architectures.
 - **Key Functions:**
@@ -77,10 +78,12 @@ Defines the building blocks used to construct the network architectures.
   - `dump(self)`: Dumps the block configuration to a log file in JSON format.
   - `create_layer(self, input_shape=None)`: Generates a list of Keras layers based on the block configuration.
 
+
 ### `library_compute_stats.py`
 Computes various statistics related to network performance.
 - **Key Functions:**
   - `compute_descriptors(y_true, y_pred)`: Calculates accuracy, precision, recall, and F1-score for the model predictions.
+
 
 ### `library_load_and_split_data.py`
 Handles data loading, preprocessing, and splitting into training, validation, and test sets.
@@ -103,4 +106,3 @@ Handles data loading, preprocessing, and splitting into training, validation, an
 - Gc
 - Random
 - Os
-
