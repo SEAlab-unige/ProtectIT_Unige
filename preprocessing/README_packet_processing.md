@@ -64,7 +64,7 @@ directories = [
     '/path/to/second/directory',
     '/path/to/third/directory'
 ]
-
+```
 ### Outputs
 - `all_sessions.idx3`: Processed session matrices
 - `all_labels.idx1`: Corresponding labels
@@ -77,7 +77,7 @@ The script utilizes the `ProcessPoolExecutor` for parallel processing, with the 
 ```python
 with ProcessPoolExecutor(max_workers=16) as executor:
     # Processing logic
-
+```
 ### Dependencies
 - Python 3
 - scapy
