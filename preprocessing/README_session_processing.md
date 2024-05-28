@@ -1,4 +1,4 @@
-# Packet Processing Script README
+# Session Processing Script README
 
 This script processes network packet capture (PCAP) files. The main functionalities include anonymizing IP addresses, extracting session data, converting them into matrices, and saving the processed data in IDX file format. Additionally, the script utilizes parallel processing to efficiently handle multiple PCAP files.
 
