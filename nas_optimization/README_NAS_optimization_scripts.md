@@ -141,14 +141,28 @@ Load raw binary data, normalize inputs, apply one-hot encoding, and prepare trai
   - `fold_index(X, y, num_splits=2)`: Generates stratified K-Fold indices for cross-validation.
   - `get_fold_split(X, Y, folds, i_fold)`: Retrieves training and validation splits for a specific fold.
 
-### Dependencies
-- Python 3
-- TensorFlow
-- Keras
-- Scikit-learn
-- Numpy
-- Keras-flops
-- Json
-- Gc
-- Random
-- Os
+### 🧩 Dependencies
+
+#### 📦 External Packages (install via `pip`)
+- `tensorflow` – Deep learning framework (includes Keras)
+- `keras-flops` – Estimates model FLOPs
+- `scikit-learn` – Utilities for K-Fold, metrics, etc.
+- `numpy` – Numerical computations
+
+#### 📁 Standard Python Libraries (built-in)
+- `json`
+- `os`
+- `copy`
+- `struct`
+- `gc`
+- `random`
+- `datetime`
+- `time`
+
+#### 📚 Internal Modules (provided in this repository)
+- `Library_NAS`
+- `Library_Net`
+- `Library_Block`
+- `Library_load_and_split_data`
+- `Library_compute_stats`
+
