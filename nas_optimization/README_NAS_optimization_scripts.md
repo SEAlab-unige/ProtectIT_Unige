@@ -1,6 +1,6 @@
 # NAS Optimization Scripts README
 
-This repository contains scripts for Neural Architecture Search (NAS) optimization. The primary functionalities include defining network architectures, performing NAS, computing performance statistics, and handling data loading and splitting.
+This repository contains scripts for NAS optimization. The primary functionalities include defining network architectures, performing NAS, computing performance statistics, and handling data loading and splitting.
 
 ## Scripts Overview
 
