@@ -54,14 +54,14 @@ Defines the network architectures and the training routines.
 ### `library_nas.py`
 This module implements the **Neural Architecture Search (NAS) engine** that evolves neural networks by applying block-level mutations across multiple generations. It works in conjunction with `library_block.py` (which defines building blocks) and `library_net.py` (which builds and trains networks).
 
-### 🔍 Main Purpose
+#### 🔍 Purpose
 
 To **automatically discover high-performing network architectures** under hardware constraints by:
 - Generating child networks via mutation
 - Evaluating them with proxy or full training
 - Selecting and evolving the best performers
   
-- **Key Functions:**
+#### 🔧 Key Functions
   - `run_NAS(self, folds)`: Executes the NAS optimization process across multiple generations.
   - `train_generation(self, child_set, folds)`: Trains a generation of child networks using full or proxy training.
   - `best_child_selection(self, child_set, gen_per, test_metrics_list)`: Selects the best performing child network based on validation metrics.
