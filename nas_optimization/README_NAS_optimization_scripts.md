@@ -39,20 +39,29 @@ The main script that orchestrates the NAS process. It sets up the data, initiali
       - `is_random_walk`: Enables random walk mutations.
 
 ### `library_net.py`
-Defines the network architectures and the training routines.
-- **Key Functions:**
+Defines the **network architecture class** used in NAS, including model construction, training routines, and hardware evaluation.
+
+#### 🔍 Purpose
+
+To:
+- Build a sequential Keras model from modular blocks
+- Train the model using full or proxy training strategies
+- Compute hardware constraints used during NAS search
+
+#### 🔧 Key Functions
+
   - `__init__(self, block_list, nas_saver_name, preloaded_data=None)`: Initializes the network with a list of blocks and optional preloaded data.
   - `fetch_data(self, num_classes=11, test_size=0.1, encode_labels=False)`: Loads and preprocesses data if not already provided.
   - `short_description(self)`: Logs a brief description of the network, including hardware parameters.
   - `dump(self)`: Logs detailed information about each block in the network.
-  - `ins_keras_model(self, load_weigths=False)`: Constructs the Keras model from defined blocks, optionally loading pretrained weights.
-  - `train_routine(self, is_train, folds)`: Handles the training of the network using K-Fold cross-validation.
-  - `proxy_train_routine(self, is_train_proxy, folds, num_selected_folds=2)`: A faster training routine using a subset of folds for proxy training.
+  - `ins_keras_model(self, load_weigths=False)`: Builds the Keras model from block list. Optionally loads pretrained weights into each block.
+  - `train_routine(self, is_train, folds)`: Trains the model using K-Fold cross-validation and computes validation and test metrics.
+  - `proxy_train_routine(self, is_train_proxy, folds, num_selected_folds=2)`: Lightweight alternative to full training. Trains using a subset of folds for speed.
   - `hw_measures(self)`: Computes and returns hardware-related measures such as number of parameters, max tensor size, FLOPs, flash size, and RAM size.
   - `log_message(self, message)`: Logs messages to a specified NAS log file.
 
 ### `library_nas.py`
-This module implements the **Neural Architecture Search (NAS) engine** that evolves neural networks by applying block-level mutations across multiple generations. It works in conjunction with `library_block.py` (which defines building blocks) and `library_net.py` (which builds and trains networks).
+This module implements the **NAS engine** that evolves neural networks by applying block-level mutations across multiple generations. It works in conjunction with `library_block.py` (which defines building blocks) and `library_net.py` (which builds and trains networks).
 
 #### 🔍 Purpose
 
