@@ -1,42 +1,50 @@
-# NAS Optimization Scripts README
+# NAS Optimization Scripts
 
-This repository contains scripts for NAS optimization. The primary functionalities include defining network architectures, performing NAS, computing performance statistics, and handling data loading and splitting.
+This repository implements a **Neural Architecture Search (NAS)** pipeline with hardware constraints. It is designed to search for optimized deep learning architectures for embedded/edge platforms with strict resource limits.
+
+The core functionalities include:
+- Defining and mutating deep learning blocks
+- Building and training networks 
+- Computing hardware and performance metrics
+- Executing NAS optimization over multiple generations
+
+The NAS process is hardware-aware and supports constraints such as parameter count, FLOPs, RAM, and Flash size.
+
+---
 
 ## Scripts Overview
 
 ### `B01_NAS.py`
-The main script that orchestrates the NAS process. It sets up the data, initializes NAS with hardware constraints, and runs the NAS process using specified parameters.
 
-- **Key Details:**
-  - **Flags for Training:**
-    - `is_train`: Indicates whether to perform training. If `True`, training is performed.
-    - `is_train_proxy`: Indicates whether to perform proxy training. If `True`, proxy training is performed.
-    - `use_full_training`: Determines the training routine to use. If `True`, uses `train_routine`. If `False`, uses `proxy_train_routine` for faster training.
-  - **Data Loading and Preprocessing:**
-    - Loads and preprocesses data without encoding labels for stratified folds generation.
-  - **Stratified K-Fold Generation:**
-    - Generates stratified K-Fold indices for cross-validation.
-  - **Label Conversion:**
-    - Converts labels to one-hot encoding after creating folds.
-  - **Preloaded Data:**
-    - Packs the preloaded data for NAS.
-  - **Timestamp Generation:**
-    - Creates a unique timestamp for this run.
-  - **NAS Initialization:**
-    - Initializes the NAS with specified parameters, including hardware constraints:
-      - `max_depth_father`: Maximum depth of the parent network.
-      - `max_depth`: Maximum depth of the child networks.
-      - `check_hw`: Enables hardware checks.
-      - `params_thr`: Threshold for the number of parameters.
-      - `flops_thr`: Threshold for the number of FLOPs.
-      - `flash_thr`: Threshold for flash memory usage.
-      - `ram_thr`: Threshold for RAM usage.
-      - `n_generations`: Number of generations to run.
-      - `n_child`: Number of child networks per generation.
-      - `n_mutations`: Number of mutations per network.
-      - `partial_save_steps`: Interval for saving partial results.
-      - `smart_start`: Enables smart initialization with predefined blocks.
-      - `is_random_walk`: Enables random walk mutations.
+This is the **main script** that launches the NAS process. It loads the dataset, sets up hardware-constrained NAS parameters, and runs the search loop.
+
+#### 🔍 Purpose
+
+To initialize and execute a full NAS run, using the defined components in `library_nas.py`, `library_net.py`, and `library_load_and_split_data.py`.
+
+#### 🧠 What It Does
+
+- Loads raw session/traffic data from `.idx3` and `.idx1` files
+- Prepares stratified K-Fold cross-validation
+- Converts labels to one-hot encoding after fold creation
+- Initializes the NAS engine with user-defined hardware constraints
+- Starts the NAS optimization loop with mutation and selection
+
+#### ⚙️ Key Parameters
+
+- `is_train`: Whether to use full training
+- `is_train_proxy`: Whether to use proxy training (faster, default)
+- `use_full_training`: Controls which training routine is used
+- `max_depth_father`, `max_depth`: Control network architecture depth
+- `check_hw`: Enforces hardware constraints
+- `params_thr`, `flops_thr`, `flash_thr`, `ram_thr`: Hardware thresholds
+- `n_generations`: Number of generations in the NAS process
+- `n_child`: Number of children per generation
+- `n_mutations`: Number of mutations applied to each child
+- `partial_save_steps`: Interval (in generations) to save progress
+- `smart_start`: Initializes with hand-crafted blocks
+- `is_random_walk`: Enables stochastic mutations
+
 
 ### `library_net.py`
 Defines the **network architecture class** used in NAS, including model construction, training routines, and hardware evaluation.
@@ -89,26 +97,47 @@ To **automatically discover high-performing network architectures** under hardwa
 
 
 ### `library_block.py`
-Defines the building blocks used to construct the network architectures.
-- **Key Functions:**
-  - `calculate_output_size(self)`: Calculates the output size of the block based on input size, stride, and pooling.
-  - `dump(self)`: Dumps the block configuration to a log file in JSON format.
-  - `create_layer(self, input_shape=None)`: Generates a list of Keras layers based on the block configuration.
+Defines modular **building blocks** for constructing convolutional neural networks during NAS.
+
+#### 🔍 Purpose
+
+To represent a reusable layer block that combines convolution, activation, pooling, and dropout.  
+Each block is used to build networks dynamically within the NAS framework.
+
+#### 🔧 Key Functions
+
+  - `calculate_output_size(self)`: Computes the block's output size after convolution and pooling, handling invalid settings automatically.
+  - `dump(self)`: Logs the block's configuration to a file in readable JSON format for NAS tracking.
+  - `create_layer(self, input_shape=None)`: Generates a list of Keras layers from the block settings. Optionally accepts input shape for the first layer.
 
 
 ### `library_compute_stats.py`
-Computes various statistics related to network performance.
-- **Key Functions:**
+
+Computes evaluation metrics for classification performance.
+
+#### 🔍 Purpose
+
+To convert predictions to class labels (if needed) and compute core classification metrics.
+
+#### 🔧 Key Function
   - `compute_descriptors(y_true, y_pred)`: Calculates accuracy, precision, recall, and F1-score for the model predictions.
 
 
 ### `library_load_and_split_data.py`
-Handles data loading, preprocessing, and splitting into training, validation, and test sets.
-- **Key Functions:**
+
+Handles data loading, normalization, and K-Fold preparation for session-based IDX-formatted datasets.
+
+#### 🔍 Purpose
+Load raw binary data, normalize inputs, apply one-hot encoding, and prepare train/validation splits.
+
+> ⚠️ **Note:** You must provide your own `.idx3` and `.idx1` files. The file paths must be manually updated in the script.
+
+#### 🔧 Key Functions
+
   - `read_idx3(filename)`: Reads and returns session data from an IDX3 file.
   - `read_idx1(filename)`: Reads and returns label data from an IDX1 file.
-  - `load_and_preprocess_data(num_classes, test_size=0.1, encode_labels=False)`: Loads, preprocesses, and splits data into training, validation, and test sets.
-  - `preprocess_data(X, y, num_classes=11, encode_labels=False)`: Normalizes the data and optionally encodes labels.
+  - `load_and_preprocess_data(num_classes, test_size=0.1, encode_labels=False)`: Loads IDX data, and splits into train/validation/test sets.
+  - `preprocess_data(X, y, num_classes=11, encode_labels=False)`: Normalizes the data to the range [0, 1] and one-hot encodes the labels if requested.
   - `fold_index(X, y, num_splits=2)`: Generates stratified K-Fold indices for cross-validation.
   - `get_fold_split(X, Y, folds, i_fold)`: Retrieves training and validation splits for a specific fold.
 
