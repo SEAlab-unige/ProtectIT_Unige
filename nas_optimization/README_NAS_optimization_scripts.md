@@ -52,7 +52,15 @@ Defines the network architectures and the training routines.
   - `log_message(self, message)`: Logs messages to a specified NAS log file.
 
 ### `library_nas.py`
-Implements the NAS algorithms, including mutations and generation management.
+This module implements the **Neural Architecture Search (NAS) engine** that evolves neural networks by applying block-level mutations across multiple generations. It works in conjunction with `library_block.py` (which defines building blocks) and `library_net.py` (which builds and trains networks).
+
+### 🔍 Main Purpose
+
+To **automatically discover high-performing network architectures** under hardware constraints by:
+- Generating child networks via mutation
+- Evaluating them with proxy or full training
+- Selecting and evolving the best performers
+  
 - **Key Functions:**
   - `run_NAS(self, folds)`: Executes the NAS optimization process across multiple generations.
   - `train_generation(self, child_set, folds)`: Trains a generation of child networks using full or proxy training.
@@ -66,9 +74,9 @@ Implements the NAS algorithms, including mutations and generation management.
   - `change_block(self, parent_blocks)`: Changes a block in the network.
   - `add_block(self, parent_blocks)`: Adds a new block to the network.
   - `recalculate_dropout_rates(self, blocks)`: Recalculates dropout rates for the blocks in the network.
-  - `correct_blocklist(self, child_blocks)`: Corrects the block list to ensure valid configurations.
+  - `correct_blocklist(self, child_blocks)`: Corrects the block list to ensure valid architectural configurations post-mutation.
   - `save_partial(self, parent, best_network, i_gen, gen_best_score, absolute_best_score)`: Saves the parent and best network models at a given generation.
-  - `log_message(self, message, mode='a')`: Logs messages to a specified NAS log file.
+  - `log_message(self, message, mode='a')`: Appends a line to the NAS log file. Used for tracking progress.
 
 
 ### `library_block.py`
