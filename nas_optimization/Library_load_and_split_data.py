@@ -24,13 +24,16 @@ def read_idx1(filename):
 
 
 def load_and_preprocess_data(num_classes, test_size=0.1, encode_labels=False):
-    # Modify the paths below to point to the locations of your .idx3 and .idx1 files
-    # Example:
-    # X = read_idx3(r'C:\path\to\your\all_sessions_pcap_duplicate.idx3')
-    # y = read_idx1(r'C:\path\to\your\all_labels_pcap_duplicate.idx1')
+    # === USER NOTE: Change these paths to point to your own IDX files ===
+    # strategy2.idx3: Feature data (like MNIST images or traffic matrices)
+    # strategy2.idx1: Label data (integer class labels)
+    #
+    # Example: place files in a 'data/' folder and update paths accordingly:
+    # X = read_idx3('./data/strategy2.idx3')
+    # y = read_idx1('./data/strategy2.idx1')
 
-    X = read_idx3('/home/adel99/Documents/idx/all_sessions_pcap_duplicate.idx3')
-    y = read_idx1('/home/adel99/Documents/idx/all_labels_pcap_duplicate.idx1')
+    X = read_idx3(r'/path/to/your/sessions_data.idx3') # <-- Change this path
+    y = read_idx1(r'/path/to/your/labels_data.idx1') # <-- Change this path
 
     # Splitting off the test set before preprocessing
     X_train_val, X_test, y_train_val, y_test = train_test_split(X, y, test_size=test_size, random_state=42, stratify=y)
@@ -42,14 +45,18 @@ def load_and_preprocess_data(num_classes, test_size=0.1, encode_labels=False):
     return X_train_val_processed, y_train_val_processed, X_test_processed, y_test_processed
 
 def preprocess_data(X, y, num_classes=11, encode_labels=False):
+    """
+    Normalizes inputs to [0,1], reshapes to (samples, 784, 1), and optionally one-hot encodes labels.
+    Suitable for Conv1D input.
+    """
     X = X.reshape((X.shape[0], -1, 1)) / 255.0
     if encode_labels:
         y = to_categorical(y, num_classes)
     return X, y
 
 
-
-num_classes = 11
+# Example usage with the inclusion of a test set
+num_classes = 11  # Based on the dataset
 X_train_val, y_train_val, X_test, y_test = load_and_preprocess_data(num_classes)
 
 # KFold configuration
@@ -67,5 +74,6 @@ def get_fold_split(X, Y, folds, i_fold):
     Y_val = Y[test_ind]
     return X_train, Y_train, X_val, Y_val
 
-# Now folds are generated and can be used for training/validation
+# Ensure folds are correctly generated and can be used for training/validation
+folds = fold_index(X_train_val, y_train_val, num_splits=5)
 folds = fold_index(X_train_val, y_train_val, num_splits=2)
