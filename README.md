@@ -18,9 +18,11 @@ Performs hardware-constrained NAS to discover deep learning architectures optimi
 Supports proxy/full training, mutation-based evolution, and performance-aware selection.  
 ➡️ See [`README.md`](./nas_optimization/)
 
-### [`processed_datasets/`](./processed_datasets/)
-Contains session-level data generated from various public datasets using different preprocessing strategies.
+### 📁 Processed Datasets (optional)
+Preprocessed session-level datasets (`.idx3` / `.idx1`) used in our experiments  
+are available in the [**GitHub Releases**](https://github.com/SEAlab-unige/ProtectIT_Unige/releases).
 
+If you prefer to use your own `.pcap` traffic, use the [`preprocessing/`](./preprocessing/) module to generate compatible inputs.
 ---
 
 ## 🧠 Pipeline Overview
@@ -40,16 +42,21 @@ The goal is to discover deep learning models that:
 
 ---
 
+---
+
 ## 🚀 Quick Start
 
-1. Preprocess raw `.pcap` files into `.idx3` / `.idx1` format:
+1. **Get the data**  
+   - Option A: Download preprocessed `.idx3` / `.idx1` files from the  
+     [GitHub Releases](https://github.com/SEAlab-unige/ProtectIT_Unige/releases)  
+   - Option B: Preprocess your own raw `.pcap` files:
 
 ```bash
 cd preprocessing
 python session_preprocessing.py
 ```
 
-2. Run hardware-constrained NAS:
+2. **Run hardware-constrained NAS**
 
 ```bash
 cd nas_optimization
