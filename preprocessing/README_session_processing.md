@@ -1,85 +1,151 @@
-# Session Processing Script README
+# 📦 Session Preprocessing Script
 
-This script processes sessions from network packet capture (PCAP) files. The main functionalities include anonymizing IP addresses, extracting session data, converting them into matrices, and saving the processed data in IDX file format. Additionally, the script utilizes parallel processing to efficiently handle multiple PCAP files.
+This script processes network traffic from `.pcap` files by extracting sessions, anonymizing sensitive fields, and converting them into fixed-size 28×28 matrices. Outputs are saved in MNIST-style `.idx` format, ready for machine learning workflows.
 
-## Key Functions
+It supports:
+- Fixed-length session extraction with padding/truncation
+- Anonymization of MACs, IPs, ports, and UDP headers
+- Labeling based on filename keywords (configurable mapping)
+- Incremental output to `.idx3` (features) and `.idx1` (labels)
+- Parallel processing across large `.pcap` datasets
+
+---
+
+### 📂 Dataset Support & Label Mapping
+
+Labels are inferred from filename keywords using a configurable `label_mapping` dictionary defined in the script.
+
+- ✅ Default mapping supports **ISCX VPN/NonVPN** dataset.
+- 🔄 You can switch to others (e.g. **USTC-TFC2016**, **QUIC-NetFlow**) by editing the dictionary.
+- ⚠️ Files without matching keywords are labeled as `"unknown"` (`255`).
+
+> 📌 To use your own dataset: ensure filenames contain identifiable keywords that match your custom label mapping.
+
+
+## 🔧 Key Functions
 
 ### `anonymize_ip(ip_address)`
-- **Purpose:** Anonymizes IPv4 and IPv6 addresses.
-- **Input:** `ip_address` (string)
-- **Output:** Anonymized IP address (string)
+Anonymizes IP addresses using SHA-256.
+- **Input:** `ip_address` (`str`)
+- **Output:** 8-character hash (`str`)
 
 ### `create_session_key(packet)`
-- **Purpose:** Creates a unique session key based on IP addresses and ports.
-- **Input:** `packet` (scapy packet)
-- **Output:** Tuple of anonymized IPs and ports
+Generates a session key based on IPs, ports, and transport protocol.
+- **Input:** `packet` (`scapy.Packet`)
+- **Output:** `(src IP, dst IP, src port, dst port, protocol)`
 
-### `extract_packet_data(packet)`
-- **Purpose:** Extracts and anonymizes packet data, removing the Ethernet header.
-- **Input:** `packet` (scapy packet)
-- **Output:** Anonymized packet data (bytes)
+### `extract_packet_data(packet, ...)`
+Extracts the raw packet data and applies preprocessing as configured.
+
+Supported operations include MAC/IP anonymization, port zeroing, and optional UDP header padding.
+
+- **Output:** Raw byte stream (`bytes`)
+
 
 ### `is_irrelevant_packet(packet)`
-- **Purpose:** Identifies irrelevant packets (e.g., TCP SYN/ACK/FIN without payload, DNS packets).
-- **Input:** `packet` (scapy packet)
-- **Output:** Boolean indicating if the packet is irrelevant
+Filters out control packets and DNS traffic.
+- **Output:** `True` if irrelevant, else `False`
 
 ### `extract_sessions(pcap_file, length=784)`
-- **Purpose:** Extracts sessions from a PCAP file, normalizes session lengths, and removes duplicates.
-- **Input:** `pcap_file` (string), `length` (int)
-- **Output:** Dictionary of sessions, statistics
+Builds sessions from packets, deduplicates them, and normalizes length.
+- **Output:** `{session_key: session_bytes}`, plus stats (`dict`)
 
 ### `extract_sessions_and_label(pcap_file, length=784)`
-- **Purpose:** Extracts sessions and labels from a PCAP file.
-- **Input:** `pcap_file` (string), `length` (int)
-- **Output:** Sessions, labels, statistics
+Extends `extract_sessions()` by assigning labels based on filename keywords.
+- **Output:** `sessions`, `labels`, and `stats`
 
 ### `convert_sessions_to_matrices(sessions)`
-- **Purpose:** Converts session data to 28x28 matrices.
-- **Input:** `sessions` (dictionary)
-- **Output:** List of 28x28 matrices
+Converts each session byte stream into a 28×28 matrix (`uint8`).
+- **Output:** Generator of `np.ndarray` matrices
 
 ### `save_to_idx3(matrices, filename)`
-- **Purpose:** Saves matrices to an IDX3 file.
-- **Input:** `matrices` (list), `filename` (string)
-- **Output:** None
+Appends image matrices to an `.idx3` file (incrementally).
 
 ### `save_to_idx1(labels, filename)`
-- **Purpose:** Saves labels to an IDX1 file.
-- **Input:** `labels` (list), `filename` (string)
-- **Output:** None
+Appends session labels to an `.idx1` file (incrementally).
 
-## Main Script
+---
 
-The `main()` function processes multiple directories of PCAP files, extracts and processes session data, and saves the results in IDX format. It uses parallel processing to handle multiple files concurrently, optimizing performance.
+## 🚀 Script Workflow
 
-### Usage
-1. Modify the `directories` list in `main()` to include paths to your PCAP files.
-2. Run the script: `python your_script.py`
+The script scans one or more directories for `.pcap` files, processes each in parallel, and incrementally updates `.idx3` and `.idx1` files with session data and labels.
 
-### Example Directories
-```python
-directories = [
-    '/path/to/first/directory',
-    '/path/to/second/directory',
-    '/path/to/third/directory'
-]
+---
+
+## 📁 Usage
+
+1. Update the `directories` list in the `main()` function to point to your `.pcap` folders.
+2. Set the desired output paths for `.idx3` and `.idx1` files.
+3. Run the script:
+```bash
+python your_script.py
 ```
-### Outputs
-- `all_sessions.idx3`: Processed session matrices
-- `all_labels.idx1`: Corresponding labels
+## ⚙️ Preprocessing Configuration
 
-### Statistics
-The script prints statistics about the processed sessions, including total sessions, truncated, padded, and average original length.
+You can control how sensitive fields are handled during preprocessing:
 
-### Parallel Processing
-The script utilizes the `ProcessPoolExecutor` for parallel processing, with the number of workers set to 16. Adjust the number of workers as needed:
+| Field           | Options                        |
+|-----------------|--------------------------------|
+| MAC addresses   | `remove`, `zero`, `anonymize`  |
+| IP addresses    | `remove`, `zero`, `anonymize`  |
+| Ports           | Zeroing: `True` or `False`     |
+| UDP Header      | Pad to 20 bytes: `True` or `False` |
+
+These options are set in the `extract_packet_data()` function (used internally). Adjust them to meet privacy or model compatibility requirements.
+
+---
+
+## 📤 Output Files
+
+- `session_output.idx3`: All session matrices (shape: 28×28, dtype: `uint8`)
+- `label_output.idx1`: Corresponding labels (dtype: `uint8`)
+
+> ✅ These files are updated **incrementally**, allowing you to process multiple PCAP files in sequence without overwriting previous results.
+
+---
+
+## 📊 Runtime Logging
+
+For each PCAP file, the script reports:
+
+- Total sessions extracted
+- Number of truncated or padded sessions
+- Average original session length (in bytes)
+- Processing time per file
+
+---
+
+## 🧵 Parallel Processing
+
+The script uses Python’s `ProcessPoolExecutor` for parallelism:
 ```python
 with ProcessPoolExecutor(max_workers=16) as executor:
-    # Processing logic
+    ...
 ```
-### Dependencies
-- Python 3
-- scapy
-- numpy
+
+## 📚 Dependencies
+
+- Python 3.x
+
+### External packages (install via pip):
+
+- `scapy`
+- `numpy`
+- `psutil`
+
+```bash
+pip install scapy numpy psutil
+```
+
+### Built-in modules (no need to install):
+
+- `os`  
+- `struct`  
+- `hashlib`  
+- `traceback`  
+- `socket`  
+- `gc`  
+- `concurrent.futures`
+
+
 
