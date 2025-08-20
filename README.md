@@ -11,12 +11,12 @@ It is designed for research and deployment in embedded or edge environments, whe
 ### [`preprocessing/`](./preprocessing/)
 Processes raw `.pcap` network traffic into fixed-length session representations.  
 Supports flexible handling of IP/MAC fields, ports, and UDP headers with parallelized processing.  
-➡️ See [`README_session_processing.md`](./preprocessing/README_session_processing.md)
+➡️ See [`README.md`](./preprocessing/)
 
 ### [`nas_optimization/`](./nas_optimization/)
 Performs hardware-constrained NAS to discover deep learning architectures optimized for low-resource devices.  
 Supports proxy/full training, mutation-based evolution, and performance-aware selection.  
-➡️ See [`README_NAS_optimization_scripts.md`](./nas_optimization/README_NAS_optimization_scripts.md)
+➡️ See [`README.md`](./nas_optimization/)
 
 ### [`processed_datasets/`](./processed_datasets/)
 Contains session-level data generated from various public datasets using different preprocessing strategies.
