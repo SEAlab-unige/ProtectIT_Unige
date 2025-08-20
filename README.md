@@ -42,8 +42,6 @@ The goal is to discover deep learning models that:
 
 ---
 
----
-
 ## 🚀 Quick Start
 
 1. **Get the data**  
