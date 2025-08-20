@@ -1,4 +1,4 @@
-# 🔐 ProtectIT_Unige: Efficient Traffic Classification on Resource-Constrained Devices
+# 🔐 HW-NAS for Encrypted Traffic Classification on Resource-Constrained Devices
 
 This repository provides a complete pipeline for session-based traffic classification, combining custom packet preprocessing with Neural Architecture Search (NAS) under hardware constraints.
 
@@ -26,7 +26,7 @@ Contains session-level data generated from various public datasets using differe
 ## 🧠 Pipeline Overview
 
 1. **Extract sessions** from `.pcap` traffic using the preprocessing module.
-2. **Search and train architectures** using the NAS engine under resource constraints.
+2. **Search and train architectures** using the NAS engine under RAM/Flash/FLOPs constraints.
 3. **Evaluate and select models** based on accuracy and hardware footprint.
 
 ---
@@ -40,9 +40,27 @@ The goal is to discover deep learning models that:
 
 ---
 
+## 🚀 Quick Start
+
+1. Preprocess raw `.pcap` files into `.idx3` / `.idx1` format:
+
+```bash
+cd preprocessing
+python session_preprocessing.py
+```
+
+2. Run hardware-constrained NAS:
+
+```bash
+cd nas_optimization
+python B01_NAS.py
+```
+
+---
+
 ## ⚠️ Note
 
-This repository is part of an academic research project. The corresponding paper is currently under peer review.
+This repository is part of an academic research project. The corresponding paper is currently under peer review.  
 
 ---
 
