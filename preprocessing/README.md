@@ -59,10 +59,10 @@ Converts each session byte stream into a 28×28 matrix (`uint8`).
 - **Output:** Generator of `np.ndarray` matrices
 
 ### `save_to_idx3(matrices, filename)`
-Appends image matrices to an `.idx3` file (incrementally).
+Appends image matrices to an `.idx3` file.
 
 ### `save_to_idx1(labels, filename)`
-Appends session labels to an `.idx1` file (incrementally).
+Appends session labels to an `.idx1` file.
 
 ---
 
@@ -100,7 +100,7 @@ These options are set in the `extract_packet_data()` function (used internally).
 - `session_output.idx3`: All session matrices (shape: 28×28, dtype: `uint8`)
 - `label_output.idx1`: Corresponding labels (dtype: `uint8`)
 
-> ✅ These files are updated **incrementally**, allowing you to process multiple PCAP files in sequence without overwriting previous results.
+> ✅ These files are updated incrementally, allowing you to process multiple PCAP files in sequence without overwriting previous results.
 
 ---
 
