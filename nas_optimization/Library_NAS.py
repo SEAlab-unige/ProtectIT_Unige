@@ -120,7 +120,7 @@ class NAS:
                 average_test_metrics_per_child.append(avg_test_metrics.tolist())  # Convert to list for consistency
             else:
                 # Since proxy_train_routine now returns only a single tuple
-                proxy_result = net.proxy_train_routine(is_train_proxy=True, selected_fold_index=0, validation_split=0.11, folds=folds)[0]
+                proxy_result = net.proxy_train_routine(is_train_proxy=self.is_train_proxy, selected_fold_index=0, validation_split=0.11, folds=folds)[0]
                 avg_val_score, avg_test_acc = proxy_result
 
                 gen_per.append(avg_val_score)
