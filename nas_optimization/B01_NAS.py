@@ -4,8 +4,8 @@ import numpy as np
 from tensorflow.keras.utils import to_categorical
 from datetime import datetime
 
-is_train = False
-is_train_proxy = True
+is_train = False # Full training mode
+is_train_proxy = True # Proxy training mode
 num_classes = 11
 test_size = 0.1
 
