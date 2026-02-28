@@ -26,8 +26,8 @@ To initialize and execute a full NAS run, using the defined components in `libra
 
 - Loads raw session/traffic data from `.idx3` and `.idx1` files
 - Prepares stratified K-Fold cross-validation
-- Converts labels to one-hot encoding after fold creation
-- Initializes the NAS engine with user-defined hardware constraints
+- Converts labels to one-hot encoding after fold creation 
+- Initializes the NAS engine with user-defined search configuration
 - Starts the NAS optimization loop with mutation and selection
 
 #### ⚙️ Key Parameters
@@ -35,6 +35,7 @@ To initialize and execute a full NAS run, using the defined components in `libra
 - `is_train_proxy`: Enables or disables `.fit()` inside the proxy training routine  
 - `is_train`: Enables or disables `.fit()` inside the full training routine
 - `use_full_training`: Controls which training routine is used
+- - `num_classes`: number of output classes (default: 11 for ISCX VPN-nonVPN)
 - `max_depth_father`, `max_depth`: Control network architecture depth
 - `check_hw`: Enforces hardware constraints
 - `params_thr`, `flops_thr`, `flash_thr`, `ram_thr`, `max_tens_thr`: Hardware thresholds
@@ -74,9 +75,10 @@ This module implements the **NAS engine** that evolves neural networks by applyi
 #### 🔍 Purpose
 
 To **automatically discover high-performing network architectures** under hardware constraints by:
-- Generating child networks via mutation
-- Evaluating them with proxy or full training
-- Selecting and evolving the best performers
+- Generating child networks via block-level mutation
+- Evaluating candidates with proxy or full training
+- **Greedy (hill-climbing-style) selection:** the best-performing *admissible* child becomes the new parent at each generation
+- Tracking the **absolute best** model found across all generations
   
 #### 🔧 Key Functions
   - `run_NAS(self, folds)`: Executes the NAS optimization process across multiple generations.
@@ -125,10 +127,10 @@ To convert predictions to class labels (if needed) and compute core classificati
 
 ### `library_load_and_split_data.py`
 
-Handles data loading, normalization, and K-Fold preparation for session-based IDX-formatted datasets.
+Handles data loading, normalization, and stratified K-Fold preparation for session-based IDX-formatted datasets.
 
 #### 🔍 Purpose
-Load raw binary data, normalize inputs, apply one-hot encoding, and prepare train/validation splits.
+Load raw IDX sessions and labels, flatten 28×28 matrices into 1D vectors, normalize inputs, reshape to Conv1D format (samples, 784, 1), optionally one-hot encode labels, and prepare train/validation splits.
 
 > ⚠️ **Note:** You must provide your own `.idx3` and `.idx1` files. The file paths must be manually updated in the script.
 
@@ -137,7 +139,7 @@ Load raw binary data, normalize inputs, apply one-hot encoding, and prepare trai
   - `read_idx3(filename)`: Reads and returns session data from an IDX3 file.
   - `read_idx1(filename)`: Reads and returns label data from an IDX1 file.
   - `load_and_preprocess_data(num_classes, test_size=0.1, encode_labels=False)`: Loads IDX data, and splits into train/validation/test sets.
-  - `preprocess_data(X, y, num_classes=11, encode_labels=False)`: Normalizes the data to the range [0, 1] and one-hot encodes the labels if requested.
+  - `preprocess_data(X, y, num_classes=11, encode_labels=False)`: Normalizes inputs to [0,1], reshapes to (samples, 784, 1), and one-hot encodes the labels if requested.
   - `fold_index(X, y, num_splits=2)`: Generates stratified K-Fold indices for cross-validation.
   - `get_fold_split(X, Y, folds, i_fold)`: Retrieves training and validation splits for a specific fold.
 
