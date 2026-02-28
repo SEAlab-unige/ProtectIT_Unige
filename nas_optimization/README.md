@@ -35,7 +35,7 @@ To initialize and execute a full NAS run, using the defined components in `libra
 - `is_train_proxy`: Enables or disables `.fit()` inside the proxy training routine  
 - `is_train`: Enables or disables `.fit()` inside the full training routine
 - `use_full_training`: Controls which training routine is used
-- - `num_classes`: number of output classes (default: 11 for ISCX VPN-nonVPN)
+- `num_classes`: number of output classes (default: 11 for ISCX VPN-nonVPN)
 - `max_depth_father`, `max_depth`: Control network architecture depth
 - `check_hw`: Enforces hardware constraints
 - `params_thr`, `flops_thr`, `flash_thr`, `ram_thr`, `max_tens_thr`: Hardware thresholds
