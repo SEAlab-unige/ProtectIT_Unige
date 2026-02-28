@@ -77,7 +77,7 @@ This module implements the **NAS engine** that evolves neural networks by applyi
 To **automatically discover high-performing network architectures** under hardware constraints by:
 - Generating child networks via block-level mutation
 - Evaluating candidates with proxy or full training
-- **Greedy (hill-climbing-style) selection:** the best-performing *admissible* child becomes the new parent at each generation
+- **Greedy (hill-climbing-style) selection:** the best-performing admissible child becomes the new parent at each generation
 - Tracking the **absolute best** model found across all generations
   
 #### 🔧 Key Functions
