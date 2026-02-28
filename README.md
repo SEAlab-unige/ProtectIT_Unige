@@ -63,9 +63,19 @@ python B01_NAS.py
 
 ---
 
-## ⚠️ Note
+## 📄 Citation
 
-This repository is part of an academic research project. The corresponding paper is currently under peer review.  
+If you use this code, please cite:
+
+**BibTeX**
+```bibtex
+@article{chehade2026hardware,
+  title={Hardware-Aware Neural Architecture Search for Encrypted Traffic Classification on Resource-Constrained Devices},
+  author={Chehade, Adel and Ragusa, Edoardo and Gastaldo, Paolo and Zunino, Rodolfo},
+  journal={IEEE Transactions on Network and Service Management},
+  year={2026},
+  publisher={IEEE}
+}
 
 ---
 
