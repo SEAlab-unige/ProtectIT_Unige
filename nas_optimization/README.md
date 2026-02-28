@@ -32,8 +32,8 @@ To initialize and execute a full NAS run, using the defined components in `libra
 
 #### ⚙️ Key Parameters
 
-- `is_train`: Whether to use full training
-- `is_train_proxy`: Whether to use proxy training (faster, default)
+- `is_train_proxy`: Enables or disables `.fit()` inside the proxy training routine  
+- `is_train`: Enables or disables `.fit()` inside the full training routine
 - `use_full_training`: Controls which training routine is used
 - `max_depth_father`, `max_depth`: Control network architecture depth
 - `check_hw`: Enforces hardware constraints
