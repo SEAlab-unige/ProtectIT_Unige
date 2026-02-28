@@ -30,8 +30,8 @@ partial_saver_name = f"Partial_saver_logger_{timestamp}"
 
 # === Initialize NAS optimizer with configurable settings ===
 NAS = Library_NAS.NAS(
-    is_train_proxy=is_train_proxy,       # Use proxy training (faster)
-    is_train=is_train,                   # Use full training (slower)
+    is_train_proxy=is_train_proxy,       # Enable .fit() inside proxy training routine
+    is_train=is_train,                   # Enable .fit() inside full training routine
 
     # === Architecture depth constraints ===
     max_depth_father=5,                 # Max depth of initial parent architecture
