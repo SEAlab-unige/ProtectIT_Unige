@@ -1,12 +1,12 @@
 # 📦 Session Preprocessing Script
 
-This script processes network traffic from `.pcap` files by extracting sessions, anonymizing sensitive fields, and converting them into fixed-size 28×28 matrices. Outputs are saved in MNIST-style `.idx` format, ready for machine learning workflows.
+This script processes network traffic from `.pcap` files by extracting sessions, anonymizing sensitive fields, and converting them into fixed-size 28×28 matrices. Outputs are saved in MNIST-style `.idx` format, ready for machine learning workflows. The 28×28 layout also enables quick manual inspection (as grayscale-like images) to observe class-specific traffic patterns; during HW-NAS training, the input is later flattened back to a 784-byte vector when loading the IDX data.
 
 It supports:
 - Fixed-length session extraction with padding/truncation
 - Anonymization of MACs, IPs, ports, and UDP headers
 - Labeling based on filename keywords (configurable mapping)
-- Incremental output to `.idx3` (features) and `.idx1` (labels)
+- Output to `.idx3` (session raw bytes) and `.idx1` (labels)
 - Parallel processing across large `.pcap` datasets
 
 ---
@@ -24,7 +24,7 @@ Labels are inferred from filename keywords using a configurable `label_mapping` 
 
 ## 🔧 Key Functions
 
-### `anonymize_ip(ip_address)`
+### `anonymize_ip(ip_address)` (IPv4)
 Anonymizes IP addresses using SHA-256.
 - **Input:** `ip_address` (`str`)
 - **Output:** 8-character hash (`str`)
@@ -78,7 +78,7 @@ The script scans one or more directories for `.pcap` files, processes each in pa
 2. Set the desired output paths for `.idx3` and `.idx1` files.
 3. Run the script:
 ```bash
-python your_script.py
+python session_preprocessing.py
 ```
 ## ⚙️ Preprocessing Configuration
 
@@ -100,7 +100,7 @@ These options are set in the `extract_packet_data()` function (used internally).
 - `session_output.idx3`: All session matrices (shape: 28×28, dtype: `uint8`)
 - `label_output.idx1`: Corresponding labels (dtype: `uint8`)
 
-> ✅ These files are updated incrementally, allowing you to process multiple PCAP files in sequence without overwriting previous results.
+> ✅ These files are appended incrementally, which is memory-efficient and allows processing many PCAP files without loading the full dataset into RAM.
 
 ---
 
