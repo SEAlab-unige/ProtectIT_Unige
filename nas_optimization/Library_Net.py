@@ -59,7 +59,7 @@ class Net:
 
         for i, block in enumerate(self.block_list):  # Use self.block_list directly
             if i == 0:
-                # For the first block, set input_shape explicitly and avoid BatchNormalization
+                # For the first block, set input_shape explicitly
                 keras_layers = block.create_layer(input_shape=(784, 1), is_first_layer=True)
             else:
                 keras_layers = block.create_layer(is_first_layer=False)
