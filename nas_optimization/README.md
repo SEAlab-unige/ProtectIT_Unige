@@ -37,7 +37,7 @@ To initialize and execute a full NAS run, using the defined components in `libra
 - `use_full_training`: Controls which training routine is used
 - `max_depth_father`, `max_depth`: Control network architecture depth
 - `check_hw`: Enforces hardware constraints
-- `params_thr`, `flops_thr`, `flash_thr`, `ram_thr`: Hardware thresholds
+- `params_thr`, `flops_thr`, `flash_thr`, `ram_thr`, `max_tens_thr`: Hardware thresholds
 - `n_generations`: Number of generations in the NAS process
 - `n_child`: Number of children per generation
 - `n_mutations`: Number of mutations applied to each child
