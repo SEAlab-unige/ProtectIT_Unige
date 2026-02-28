@@ -67,9 +67,8 @@ class Net:
             for layer in keras_layers:
                 model.add(layer)
 
-        # GlobalAveragePooling, Flatten, and Dense layers remain the same
         model.add(tf.keras.layers.GlobalAveragePooling1D())
-        model.add(tf.keras.layers.Flatten())
+        # model.add(tf.keras.layers.Flatten()) #either flatten either GAP
         num_classes = 11  # Adjust based on your number of classes
         model.add(tf.keras.layers.Dense(num_classes, activation='softmax'))
 
