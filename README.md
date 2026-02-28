@@ -66,7 +66,7 @@ python B01_NAS.py
 ## 📄 Citation
 
 If you use this code, please cite:
-
+```bash
 @article{chehade2026hardware,
   title={Hardware-Aware Neural Architecture Search for Encrypted Traffic Classification on Resource-Constrained Devices},
   author={Chehade, Adel and Ragusa, Edoardo and Gastaldo, Paolo and Zunino, Rodolfo},
@@ -74,7 +74,7 @@ If you use this code, please cite:
   year={2026},
   publisher={IEEE}
 }
-
+```
 ---
 
 ## 📚 Requirements
