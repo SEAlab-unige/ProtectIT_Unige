@@ -44,7 +44,13 @@ The goal is to discover deep learning models that:
 
 ## 🚀 Quick Start
 
-1. **Get the data**  
+1. **Clone the repository**
+```bash
+git clone https://github.com/SEAlab-unige/ProtectIT_Unige.git
+cd ProtectIT_Unige
+```
+
+2. **Get the data**  
    - Option A: Download preprocessed `.idx3` / `.idx1` files from the  
      [GitHub Releases](https://github.com/SEAlab-unige/ProtectIT_Unige/releases)  
    - Option B: Preprocess your own raw `.pcap` files:
@@ -54,7 +60,7 @@ cd preprocessing
 python session_preprocessing.py
 ```
 
-2. **Run hardware-constrained NAS**
+3. **Run hardware-constrained NAS**
 
 ```bash
 cd nas_optimization
