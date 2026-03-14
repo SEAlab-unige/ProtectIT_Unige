@@ -1,6 +1,6 @@
 # 🔐 HW-NAS for Encrypted Traffic Classification on Resource-Constrained Devices
 
-This repository provides a complete pipeline for session-based traffic classification, combining custom packet preprocessing with Neural Architecture Search (NAS) under hardware constraints.
+This repository contains a full pipeline for session-based encrypted traffic classification, from raw traffic preprocessing to hardware-aware neural architecture search (HW-NAS).
 
 It is designed for research and deployment in embedded or edge environments, where model size, memory, and compute efficiency matter.
 
@@ -14,7 +14,7 @@ Supports flexible handling of IP/MAC fields, ports, and UDP headers with paralle
 ➡️ See [`README.md`](./preprocessing/)
 
 ### [`nas_optimization/`](./nas_optimization/)
-Performs hardware-constrained NAS to discover deep learning architectures optimized for low-resource devices.  
+Performs hardware-constrained neural architecture search (NAS) to discover deep learning architectures optimized for low-resource devices.  
 Supports proxy/full training, mutation-based evolution, and performance-aware selection.  
 ➡️ See [`README.md`](./nas_optimization/)
 
